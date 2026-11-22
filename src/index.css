@@ -1,0 +1,9 @@
+@import "tailwindcss";
+@theme {
+  --font-sans: "Tajawal", system-ui, sans-serif;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+}
