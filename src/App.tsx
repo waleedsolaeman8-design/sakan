@@ -1,7 +1,15 @@
-import Header from './components/Header'
-
+import { Route, Routes } from 'react-router'
+import Layout from './components/Layout'
+import HomePage from './pages/HomePage'
+import NotFoundPage from './pages/NotFoundPage'
 function App() {
-  return <Header />
+    return (
+    <Routes>
+      <Route element={<Layout />}>
+        <Route path="/" element={<HomePage />} />
+        <Route path="*" element={<NotFoundPage />} />
+      </Route>
+    </Routes>
+  )
 }
-
 export default App
