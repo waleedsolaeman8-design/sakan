@@ -1,9 +1,10 @@
 import { useState, type FormEvent } from 'react'
-import { useNavigate } from 'react-router'
+import { useNavigate,Link } from 'react-router'
 import { useQuery } from '@tanstack/react-query'
 import { api } from '../lib/api'
-import type { City } from '../types'
+import type { City,Stats,Paginated, Property } from '../types'
 import { PROPERTY_TYPES } from '../constants'
+import PropertyCard from '../components/PropertyCard'
 export default function HomePage() {
     const [purpose, setPurpose] = useState('SALE')
       const { data: cities } = useQuery({
@@ -21,7 +22,27 @@ export default function HomePage() {
     if (type) params.set('type', type)
     navigate(`/properties?${params}`)
   }
+    const { data: stats } = useQuery({
+    queryKey: ['stats'],
+    queryFn: async () => (await api.get<Stats>('/stats')).data,
+  })
+     const { data: featured, isLoading, isError } = useQuery({
+    queryKey: ['properties', 'featured'],
+    queryFn: async () =>
+      (
+        await api.get<Paginated<Property>>('/properties', {
+          params: { featured: true, limit: 4 },
+        })
+      ).data.data,
+  })
+    const statItems = [
+    { value: stats?.properties, label: 'عقار منشور' },
+    { value: stats?.agents, label: 'وكيل عقاري' },
+    { value: stats?.cities, label: 'مدن' },
+    { value: stats?.closedDeals, label: 'صفقة مغلقة' },
+  ]
   return (
+        <>
     <section className="bg-gradient-to-br from-emerald-900 via-emerald-700 to-teal-700 px-12 py-20 text-white">
             <div className="mx-auto flex max-w-3xl flex-col items-center gap-3 text-center">
         <h1 className="text-5xl font-extrabold leading-tight">
@@ -88,5 +109,35 @@ export default function HomePage() {
         </div>
       </form>
     </section>
+              <section className="border-b border-slate-200 bg-slate-50 px-6 py-10 md:px-12">
+        <div className="mx-auto grid max-w-5xl grid-cols-2 gap-6 md:grid-cols-4">
+          {statItems.map((item) => (
+            <div key={item.label} className="flex flex-col items-center gap-1 text-center">
+              <span className="text-4xl font-extrabold text-emerald-700">{item.value ?? '-'}</span>
+              <span className="text-slate-600">{item.label}</span>
+            </div>
+          ))}
+        </div>
+      </section>
+            <section className="flex flex-col gap-7 px-6 pt-16 pb-6 md:px-12">
+        <div className="flex flex-wrap items-end justify-between gap-4">
+          <div className="flex flex-col gap-1.5">
+            <h2 className="text-3xl font-extrabold">عقارات مميزة</h2>
+            <p className="text-slate-600">اختيارات الفريق من أفضل العروض المنشورة.</p>
+          </div>
+          <Link to="/properties?featured=true" className="font-bold text-emerald-700">
+            عرض الكل
+          </Link>
+        </div>
+                {isLoading && <p className="text-slate-500">جاري تحميل العقارات...</p>}
+        {isError && <p className="text-red-600">تعذّر تحميل العقارات، حاول مرة أخرى.</p>}
+        {featured?.length === 0 && <p className="text-slate-500">لا توجد عقارات مميزة حالياً.</p>}
+        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          {featured?.map((property) => (
+            <PropertyCard key={property.id} property={property} />
+          ))}
+        </div>
+      </section>
+        </>
   )
 }
