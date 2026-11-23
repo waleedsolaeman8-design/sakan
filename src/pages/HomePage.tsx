@@ -5,7 +5,9 @@ import { api } from '../lib/api'
 import type { City,Stats,Paginated, Property } from '../types'
 import { PROPERTY_TYPES } from '../constants'
 import PropertyCard from '../components/PropertyCard'
+import { usePageTitle } from '../hooks/usePageTitle'
 export default function HomePage() {
+    usePageTitle('الرئيسية')
     const [purpose, setPurpose] = useState('SALE')
       const { data: cities } = useQuery({
     queryKey: ['cities'],
@@ -137,6 +139,46 @@ export default function HomePage() {
             <PropertyCard key={property.id} property={property} />
           ))}
         </div>
+      </section>
+            <section className="flex flex-col gap-7 px-6 pt-12 pb-6 md:px-12">
+        <div className="flex flex-col gap-1.5">
+          <h2 className="text-3xl font-extrabold">تصفح حسب المدينة</h2>
+          <p className="text-slate-600">اختر مدينتك وشاهد العقارات المنشورة فيها.</p>
+        </div>
+                <div className="grid grid-cols-2 gap-5 md:grid-cols-3 lg:grid-cols-5">
+          {cities?.map((city) => (
+            <Link
+              key={city.id}
+              to={`/properties?cityId=${city.id}`}
+              className="relative flex h-40 flex-col justify-end overflow-hidden rounded-2xl bg-emerald-900 p-4 text-white"
+            >
+                            <img
+                src={city.imageUrl}
+                alt=""
+                loading="lazy"
+                className="absolute inset-0 h-full w-full object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
+                           <span className="relative text-xl font-extrabold">{city.nameAr}</span>
+              <span className="relative text-sm text-emerald-100">{city.propertiesCount} عقار</span>
+            </Link>
+          ))}
+        </div>
+      </section>
+            <section className="mx-6 mt-12 flex flex-wrap items-center justify-between gap-6 rounded-3xl bg-emerald-50 p-10 md:mx-12">
+        <div className="flex max-w-xl flex-col gap-2">
+          <h2 className="text-3xl font-extrabold text-emerald-950">هل أنت وكيل عقاري؟</h2>
+          <p className="leading-relaxed text-slate-700">
+            أنشئ حساب وكيل، وانشر إعلاناتك، واستقبل استفسارات العملاء، وتابع إحصائياتك من لوحة تحكم
+            خاصة بك.
+          </p>
+        </div>
+        <Link
+          to="/register"
+          className="rounded-xl bg-emerald-700 px-8 py-3.5 text-lg font-bold text-white"
+        >
+          ابدأ كوكيل
+        </Link>
       </section>
         </>
   )
