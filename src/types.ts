@@ -40,3 +40,27 @@ export type Paginated<T> = {
     hasPrevPage: boolean
   }
 }
+export type Amenity = {
+  id: number
+  nameAr: string
+  nameEn: string
+  icon: string
+}
+
+export type PropertyDetails = Property & {
+  description: string
+  images: string[]
+  floor: number | null
+  yearBuilt: number | null
+  address: string | null
+  amenities: Amenity[]
+  agent: {
+    id: number
+    name: string
+    phone: string
+    avatarUrl: string | null
+    email: string
+    bio: string
+    listingsCount: number
+  }
+}
