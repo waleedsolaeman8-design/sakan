@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router'
 import { toast } from 'sonner'
 import { api } from '../lib/api'
 import type { AuthResponse } from '../types'
+import useAuth from '../hooks/useAuth'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { loginSchema, type LoginFormValues } from '../lib/schemas'
@@ -16,13 +17,13 @@ export default function LoginPage() {
     resolver: zodResolver(loginSchema),
   })
     const navigate = useNavigate()
+      const { login } = useAuth()
 
   const mutation = useMutation({
     mutationFn: async (values: LoginFormValues) =>
       (await api.post<AuthResponse>('/auth/login', values)).data,
     onSuccess: (data) => {
-      localStorage.setItem('token', data.accessToken)
-      localStorage.setItem('user', JSON.stringify(data.user))
+      login(data.accessToken, data.user)
       toast.success(`أهلاً ${data.user.name}`)
       navigate('/')
     },
