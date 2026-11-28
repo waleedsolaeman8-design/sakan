@@ -65,3 +65,20 @@ export type PropertyDetails = Property & {
     listingsCount: number
   }
 }
+
+export type Role = 'USER' | 'AGENT' | 'ADMIN'
+
+export type User = {
+  id: number
+  name: string
+  email: string
+  phone: string | null
+  avatarUrl: string | null
+  bio: string | null
+  role: Role
+}
+
+export type AuthResponse = {
+  accessToken: string
+  user: User
+}

@@ -4,6 +4,7 @@ import HomePage from './pages/HomePage'
 import NotFoundPage from './pages/NotFoundPage'
 import PropertiesPage from './pages/PropertiesPage'
 import PropertyDetailsPage from './pages/PropertyDetailsPage'
+import LoginPage from './pages/LoginPage'
 function App() {
     return (
     <Routes>
@@ -12,6 +13,8 @@ function App() {
         <Route path="/properties" element={<PropertiesPage />} />
         <Route path="*" element={<NotFoundPage />} />
         <Route path="/properties/:id" element={<PropertyDetailsPage />} />
+        <Route path="/properties/:id" element={<PropertyDetailsPage />} />
+        <Route path="/login" element={<LoginPage />} />
       </Route>
     </Routes>
   )
