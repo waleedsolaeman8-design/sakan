@@ -5,6 +5,7 @@ import NotFoundPage from './pages/NotFoundPage'
 import PropertiesPage from './pages/PropertiesPage'
 import PropertyDetailsPage from './pages/PropertyDetailsPage'
 import LoginPage from './pages/LoginPage'
+import RegisterPage from './pages/RegisterPage'
 function App() {
     return (
     <Routes>
@@ -15,6 +16,7 @@ function App() {
         <Route path="/properties/:id" element={<PropertyDetailsPage />} />
         <Route path="/properties/:id" element={<PropertyDetailsPage />} />
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
       </Route>
     </Routes>
   )

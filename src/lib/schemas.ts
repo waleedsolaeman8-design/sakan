@@ -15,3 +15,15 @@ export const loginSchema = z.object({
 })
 
 export type LoginFormValues = z.infer<typeof loginSchema>
+export const registerSchema = z.object({
+  name: z.string().min(2, 'الاسم مطلوب (حرفان على الأقل)'),
+  email: z.email('البريد الإلكتروني غير صحيح'),
+  phone: z.string().regex(/^\+?[0-9]{8,15}$/, 'رقم الهاتف غير صحيح (مثال: +962790000000)'),
+  password: z
+    .string()
+    .min(8, 'كلمة المرور 8 أحرف على الأقل')
+    .max(64, 'كلمة المرور طويلة (64 حرف كحد أقصى)'),
+  role: z.enum(['USER', 'AGENT']),
+})
+
+export type RegisterFormValues = z.infer<typeof registerSchema>
