@@ -23,6 +23,7 @@ export type Property = {
   area: number
   bedrooms: number
   bathrooms: number
+  furnished: boolean
   neighborhood: string
   coverImage: string
   isFeatured: boolean
